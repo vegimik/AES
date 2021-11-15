@@ -7,66 +7,60 @@ namespace Assignment_1_AES
     public class AES : IAES
     {
 
-        static string aes_key = "Vjhhvhkljlckjc87b4dgjufxFSDHjhtyf867vhjKL9k=";
-        static string aes_iv = "vkuyfgufyHF7fufERTihih==";
+        static string aesKEY = "Vjhhvhkljlckjc87b4dgjufxFSDHjhtyf867vhjKL9k=";
+        static string aesIV = "vkuyfgufyHF7fufERTihih==";
 
-        public string DecryptAES(string encryptedText)
+        public string Decrypt(string encryptedText, CipherMode cipherMode = CipherMode.CBC, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            string decrypted = null;
-            byte[] cipher = Convert.FromBase64String(encryptedText);
-
-            using (AesCryptoServiceProvider aes = new AesCryptoServiceProvider())
+            string decyptedText = null;
+            byte[] cipherBytes = Convert.FromBase64String(encryptedText);
+            using (AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider())
             {
-                aes.Key = Convert.FromBase64String(aes_key);
-                aes.IV = Convert.FromBase64String(aes_iv);
-                aes.Mode = CipherMode.CBC;
-                aes.Padding = PaddingMode.PKCS7;
+                aesCryptoServiceProvider.Key = Convert.FromBase64String(aesKEY);
+                aesCryptoServiceProvider.IV = Convert.FromBase64String(aesIV);
+                aesCryptoServiceProvider.Mode = cipherMode;
+                aesCryptoServiceProvider.Padding = paddingMode;
+                ICryptoTransform cryptoTransform = aesCryptoServiceProvider.CreateDecryptor(aesCryptoServiceProvider.Key, aesCryptoServiceProvider.IV);
 
-                ICryptoTransform dec = aes.CreateDecryptor(aes.Key, aes.IV);
-
-                using (MemoryStream ms = new MemoryStream(cipher))
+                using (MemoryStream ms = new MemoryStream(cipherBytes))
                 {
-                    using (CryptoStream cs = new CryptoStream(ms, dec, CryptoStreamMode.Read))
+                    using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Read))
                     {
                         using (StreamReader sr = new StreamReader(cs))
                         {
-                            decrypted = sr.ReadToEnd();
+                            decyptedText = sr.ReadToEnd();
                         }
                     }
                 }
             }
-
-            return decrypted;
+            return decyptedText;
         }
 
-        public string EncryptAES(string plainText)
+        public string Encrypt(string plainText, CipherMode cipherMode = CipherMode.CBC, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
-            byte[] encrypted;
-
-            using (AesCryptoServiceProvider aes = new AesCryptoServiceProvider())
+            byte[] encryptedBytes;
+            using (AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider())
             {
-                aes.Key = Convert.FromBase64String(aes_key);
-                aes.IV = Convert.FromBase64String(aes_iv);
-                aes.Mode = CipherMode.CBC;
-                aes.Padding = PaddingMode.PKCS7;
+                aesCryptoServiceProvider.Key = Convert.FromBase64String(aesKEY);
+                aesCryptoServiceProvider.IV = Convert.FromBase64String(aesIV);
+                aesCryptoServiceProvider.Mode = cipherMode;
+                aesCryptoServiceProvider.Padding = paddingMode;
 
-                ICryptoTransform enc = aes.CreateEncryptor(aes.Key, aes.IV);
+                ICryptoTransform cryptoTransform = aesCryptoServiceProvider.CreateEncryptor(aesCryptoServiceProvider.Key, aesCryptoServiceProvider.IV);
 
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    using (CryptoStream cs = new CryptoStream(ms, enc, CryptoStreamMode.Write))
+                    using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
                     {
                         using (StreamWriter sw = new StreamWriter(cs))
                         {
                             sw.Write(plainText);
                         }
-
-                        encrypted = ms.ToArray();
+                        encryptedBytes = ms.ToArray();
                     }
                 }
             }
-
-            return Convert.ToBase64String(encrypted);
+            return Convert.ToBase64String(encryptedBytes);
         }
     }
 }

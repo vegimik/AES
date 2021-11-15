@@ -1,12 +1,14 @@
-﻿namespace Assignment_1_AES
+﻿using System.Security.Cryptography;
+
+namespace Assignment_1_AES
 {
     public interface IAES
     {
-        static string aes_key = "Vjhhvhkljlckjc87b4dgjufxFSDHjhtyf867vhjKL9k=";
-        static string aes_iv = "vkuyfgufyHF7fufERTihih==";
+        static string aesKEY = "Vjhhvhkljlckjc87b4dgjufxFSDHjhtyf867vhjKL9k=";
+        static string aesIV = "vkuyfgufyHF7fufERTihih==";
 
-        string DecryptAES(string encryptedText);
+        string Decrypt(string encryptedText, CipherMode cipherMode = CipherMode.CBC, PaddingMode paddingMode = PaddingMode.PKCS7);
 
-        string EncryptAES(string plainText);
+        string Encrypt(string plainText, CipherMode cipherMode = CipherMode.CBC, PaddingMode paddingMode = PaddingMode.PKCS7);
     }
 }

@@ -16,7 +16,7 @@ namespace Assignment_1_AES
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
             var plaintext = txtPlaintext.Text;
-            var cipertext=_aes.EncryptAES(plaintext);
+            var cipertext = _aes.Encrypt(plaintext);
             rtbCipertext.Text = cipertext;
             txtPlaintext.Text = "";
         }
@@ -24,7 +24,7 @@ namespace Assignment_1_AES
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
             var cipertext = rtbCipertext.Text;
-            var plaintext = _aes.DecryptAES(cipertext);
+            var plaintext = _aes.Decrypt(cipertext);
             txtPlaintext.Text = plaintext;
         }
 
