@@ -10,32 +10,6 @@ namespace Assignment_1_AES
         static string aesKEY = "Vjhhvhkljlckjc87b4dgjufxFSDHjhtyf867vhjKL9k=";
         static string aesIV = "vkuyfgufyHF7fufERTihih==";
 
-        public string Decrypt(string encryptedText, CipherMode cipherMode = CipherMode.CBC, PaddingMode paddingMode = PaddingMode.PKCS7)
-        {
-            string decyptedText = null;
-            byte[] cipherBytes = Convert.FromBase64String(encryptedText);
-            using (AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider())
-            {
-                aesCryptoServiceProvider.Key = Convert.FromBase64String(aesKEY);
-                aesCryptoServiceProvider.IV = Convert.FromBase64String(aesIV);
-                aesCryptoServiceProvider.Mode = cipherMode;
-                aesCryptoServiceProvider.Padding = paddingMode;
-                ICryptoTransform cryptoTransform = aesCryptoServiceProvider.CreateDecryptor(aesCryptoServiceProvider.Key, aesCryptoServiceProvider.IV);
-
-                using (MemoryStream ms = new MemoryStream(cipherBytes))
-                {
-                    using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader sr = new StreamReader(cs))
-                        {
-                            decyptedText = sr.ReadToEnd();
-                        }
-                    }
-                }
-            }
-            return decyptedText;
-        }
-
         public string Encrypt(string plainText, CipherMode cipherMode = CipherMode.CBC, PaddingMode paddingMode = PaddingMode.PKCS7)
         {
             byte[] encryptedBytes;
@@ -61,6 +35,32 @@ namespace Assignment_1_AES
                 }
             }
             return Convert.ToBase64String(encryptedBytes);
+        }
+
+        public string Decrypt(string encryptedText, CipherMode cipherMode = CipherMode.CBC, PaddingMode paddingMode = PaddingMode.PKCS7)
+        {
+            string decyptedText = null;
+            byte[] cipherBytes = Convert.FromBase64String(encryptedText);
+            using (AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider())
+            {
+                aesCryptoServiceProvider.Key = Convert.FromBase64String(aesKEY);
+                aesCryptoServiceProvider.IV = Convert.FromBase64String(aesIV);
+                aesCryptoServiceProvider.Mode = cipherMode;
+                aesCryptoServiceProvider.Padding = paddingMode;
+                ICryptoTransform cryptoTransform = aesCryptoServiceProvider.CreateDecryptor(aesCryptoServiceProvider.Key, aesCryptoServiceProvider.IV);
+
+                using (MemoryStream ms = new MemoryStream(cipherBytes))
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader sr = new StreamReader(cs))
+                        {
+                            decyptedText = sr.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            return decyptedText;
         }
     }
 }
