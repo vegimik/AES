@@ -1,33 +1,88 @@
-﻿using System;
+﻿using Assignment_1_AES.Helper;
+using Assignment_1_AES.Service;
+using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Assignment_1_AES
 {
     public partial class Form1 : Form
     {
-        private readonly IAES _aes;
+        private readonly IAESCryptography aesCryptography;
+        private IAes _aes;
         private string plainTextFileContent;
+
+        static string aesKEY = "Vjhhvhkljlckjc87b4dgjufxFSDHjhtyf867vhjKL9k=";
+        static string aesIV = "vkuyfgufyHF7fufERTihih==";
+        private KeySizeEnum keysize;
 
         public Form1()
         {
             InitializeComponent();
-            _aes = new AES();
+            aesCryptography = new AESCryptography();
         }
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
+            if (rbCbc.Checked)
+            {
+                var plaintext = txtPlaintext.Text;
+                var cipertext = aesCryptography.Encrypt(plaintext);
+                rtbCipertext.Text = cipertext;
+            }
+            else
+            {
+                switch (cbAesBits.Text)
+                {
+                    case "Bits128":
+                        keysize = KeySizeEnum.Bits256;
+                        break;
+                    case "Bits192":
+                        keysize = KeySizeEnum.Bits256;
+                        break;
+                    case "Bits256":
+                        keysize = KeySizeEnum.Bits256;
+                        break;
+                    default:
+                        keysize = KeySizeEnum.Bits128;
+                        break;
+                }
 
-            var plaintext = txtPlaintext.Text;
-            var cipertext = _aes.Encrypt(plaintext);
-            rtbCipertext.Text = cipertext;
+                var objAes = new Aes(aesKEY, (int)keysize);
+                rtbCipertext.Text = objAes.Encrypt(txtPlaintext.Text);
+            }
         }
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            var cipertext = rtbCipertext.Text;
-            var plaintext = _aes.Decrypt(cipertext);
-            rtbPlainText.Text = plaintext;
+            if (rbCbc.Checked)
+            {
+                var cipertext = rtbCipertext.Text;
+                var plaintext = aesCryptography.Decrypt(cipertext);
+                rtbPlainText.Text = plaintext;
+            }
+            else
+            {
+                switch (cbAesBits.Text)
+                {
+                    case "Bits128":
+                        keysize = KeySizeEnum.Bits256;
+                        break;
+                    case "Bits192":
+                        keysize = KeySizeEnum.Bits256;
+                        break;
+                    case "Bits256":
+                        keysize = KeySizeEnum.Bits256;
+                        break;
+                    default:
+                        keysize = KeySizeEnum.Bits128;
+                        break;
+                }
+
+                var objAes = new Aes(aesKEY, (int)keysize);
+                rtbPlainText.Text = objAes.Decrypt(rtbCipertext.Text);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -94,6 +149,54 @@ namespace Assignment_1_AES
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+        }
+
+        private void rbCtr_CheckedChanged(object sender, EventArgs e)
+        {
+            cbAesBits.Enabled = true;
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rbCbc_Click(object sender, EventArgs e)
+        {
+            cbAesBits.Enabled = false;
+            cbAesBits.SelectedIndex = 2;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            txtFileName.Text = "";
+            txtPlaintext.Text = "";
+            rtbPlainText.Text = "";
+            rtbCipertext.Text = "";
+        }
+
+        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtPlaintext_TextChanged(object sender, EventArgs e)
         {
 
         }
