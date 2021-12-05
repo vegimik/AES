@@ -12,10 +12,8 @@ namespace Assignment_1_AES
         private readonly IAESCryptography aesCryptography;
         private IAes _aes;
         private string plainTextFileContent;
-
-        static string aesKEY = "Vjhhvhkljlckjc87b4dgjufxFSDHjhtyf867vhjKL9k=";
-        static string aesIV = "vkuyfgufyHF7fufERTihih==";
         private KeySizeEnum keysize;
+        private string aesKEY;
 
         public Form1()
         {
@@ -35,18 +33,30 @@ namespace Assignment_1_AES
             {
                 switch (cbAesBits.Text)
                 {
-                    case "Bits128":
-                        keysize = KeySizeEnum.Bits256;
-                        break;
-                    case "Bits192":
-                        keysize = KeySizeEnum.Bits256;
-                        break;
                     case "Bits256":
-                        keysize = KeySizeEnum.Bits256;
-                        break;
+                        {
+                            keysize = KeySizeEnum.Bits256;
+                            aesKEY = Constants.AesKey256;
+                            break;
+                        }
+                    case "Bits192":
+                        {
+                            keysize = KeySizeEnum.Bits192;
+                            aesKEY = Constants.AesKey192;
+                            break;
+                        }
+                    case "Bits128":
+                        {
+                            keysize = KeySizeEnum.Bits128;
+                            aesKEY = Constants.AesKey128;
+                            break;
+                        }
                     default:
-                        keysize = KeySizeEnum.Bits128;
-                        break;
+                        {
+                            keysize = KeySizeEnum.Bits128;
+                            aesKEY = Constants.AesKey128;
+                            break;
+                        }
                 }
 
                 var objAes = new Aes(aesKEY, (int)keysize);
@@ -66,18 +76,30 @@ namespace Assignment_1_AES
             {
                 switch (cbAesBits.Text)
                 {
-                    case "Bits128":
-                        keysize = KeySizeEnum.Bits256;
-                        break;
-                    case "Bits192":
-                        keysize = KeySizeEnum.Bits256;
-                        break;
                     case "Bits256":
-                        keysize = KeySizeEnum.Bits256;
-                        break;
+                        {
+                            keysize = KeySizeEnum.Bits256;
+                            aesKEY = Constants.AesKey256;
+                            break;
+                        }
+                    case "Bits192":
+                        {
+                            keysize = KeySizeEnum.Bits192;
+                            aesKEY = Constants.AesKey192;
+                            break;
+                        }
+                    case "Bits128":
+                        {
+                            keysize = KeySizeEnum.Bits128;
+                            aesKEY = Constants.AesKey128;
+                            break;
+                        }
                     default:
-                        keysize = KeySizeEnum.Bits128;
-                        break;
+                        {
+                            keysize = KeySizeEnum.Bits128;
+                            aesKEY = Constants.AesKey128;
+                            break;
+                        }
                 }
 
                 var objAes = new Aes(aesKEY, (int)keysize);
